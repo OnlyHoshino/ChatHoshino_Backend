@@ -23,14 +23,18 @@ app.post("/message/add", async (req, res) => {
 	console.log(req.body);
 	if (req.body.message === "") {
 		res.send("메세지가 없습니다.");
-	}
-	sendMessageToAssistant(process.env.THREAD_ID, req.body.message);
-	const run = await createRun(process.env.THREAD_ID, process.env.ASSISTANT_ID);
-	await waitRun(run, process.env.THREAD_ID);
-	const response = await receiveMessage(process.env.THREAD_ID);
+	} else {
+		sendMessageToAssistant(process.env.THREAD_ID, req.body.message);
+		const run = await createRun(
+			process.env.THREAD_ID,
+			process.env.ASSISTANT_ID,
+		);
+		await waitRun(run, process.env.THREAD_ID);
+		const response = await receiveMessage(process.env.THREAD_ID);
 
-	console.log(response.data[0].content[0].text.value);
-	res.json({ res: response.data[0].content[0].text.value });
+		console.log(response.data[0].content[0].text.value);
+		res.json({ res: response.data[0].content[0].text.value });
+	}
 });
 
 app.listen(5000, function () {
