@@ -32,6 +32,11 @@ export async function waitRun(run, threadId) {
 	return run;
 }
 
+export async function receiveMessage(threadId) {
+	const response = await openai.beta.threads.messages.list(threadId, "asc");
+	return response;
+}
+
 async function main() {
 	const assistantId = "asst_A2sd6XiYDIqUZrhOU1FXcwEe";
 	const threadId = "thread_q5MDoeajd3f1cLSfp14UJyNJ";
@@ -50,7 +55,7 @@ async function main() {
 		await waitRun(run, threadId);
 		// console.log(result);
 
-		const response = await openai.beta.threads.messages.list(threadId, "asc");
+		const response = await receiveMessage(threadId);
 
 		console.log(response.data[0].content[0].text.value);
 	} catch (error) {
@@ -58,4 +63,4 @@ async function main() {
 	}
 }
 
-main();
+// main();
